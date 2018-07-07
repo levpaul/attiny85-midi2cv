@@ -801,7 +801,6 @@ LOCAL_OBJ_FILES = $(LOCAL_C_SRCS:.c=.c.o)   $(LOCAL_CPP_SRCS:.cpp=.cpp.o) \
 		$(LOCAL_INO_SRCS:.ino=.ino.o) $(LOCAL_AS_SRCS:.S=.S.o)
 LOCAL_OBJS      = $(patsubst %,$(OBJDIR)/%,$(LOCAL_OBJ_FILES))
 
-$(call show_config_variable,LOCAL_INO_SRCS,[LEVIEVIEIVI])
 
 ifeq ($(words $(LOCAL_SRCS)), 0)
     $(error At least one source file (*.ino, *.pde, *.cpp, *c, *cc, *.S) is needed)
@@ -888,8 +887,6 @@ ifndef ARDUINO_LIBS
         $(shell sed -ne 's/^ *\# *include *[<\"]\(.*\)\.h[>\"]/\1/p' $(LOCAL_SRCS)))
 endif
 
-$(call show_config_variable,ARDUINO_LIBS,[LEVIEVIEIVI])
-$(call show_config_variable,LOCAL_SRCS,[LEVIEVIEIVI])
 ########################################################################
 # Serial monitor (just a screen wrapper)
 
@@ -985,28 +982,20 @@ get_library_includes = $(if $(and $(wildcard $(1)/src), $(wildcard $(1)/library.
 get_library_files  = $(if $(and $(wildcard $(1)/src), $(wildcard $(1)/library.properties)), \
                         $(call rwildcard,$(1)/src/,*.$(2)), \
                         $(wildcard $(1)/*.$(2) $(1)/utility/*.$(2)))
-$(call show_config_variable,get_library_includes,[LEVIEVIEIVI])
-$(call show_config_variable,get_library_files,[LEVIEVIEIVI])
 
 # General arguments
 USER_LIBS      := $(sort $(wildcard $(patsubst %,$(USER_LIB_PATH)/%,$(ARDUINO_LIBS))))
 USER_LIB_NAMES := $(patsubst $(USER_LIB_PATH)/%,%,$(USER_LIBS))
-$(call show_config_variable,USER_LIBS,[LEVIEVIEIVI])
-$(call show_config_variable,USER_LIB_NAMES,[LEVIEVIEIVI])
 
 # Let user libraries override system ones.
 SYS_LIBS       := $(sort $(wildcard $(patsubst %,$(ARDUINO_LIB_PATH)/%,$(filter-out $(USER_LIB_NAMES),$(ARDUINO_LIBS)))))
 SYS_LIB_NAMES  := $(patsubst $(ARDUINO_LIB_PATH)/%,%,$(SYS_LIBS))
-$(call show_config_variable,SYS_LIBS,[LEVIEVIEIVI])
-$(call show_config_variable,SYS_LIB_NAMES,[LEVIEVIEIVI])
 
 ifdef ARDUINO_PLATFORM_LIB_PATH
     PLATFORM_LIBS       := $(sort $(wildcard $(patsubst %,$(ARDUINO_PLATFORM_LIB_PATH)/%,$(filter-out $(USER_LIB_NAMES),$(ARDUINO_LIBS)))))
     PLATFORM_LIB_NAMES  := $(patsubst $(ARDUINO_PLATFORM_LIB_PATH)/%,%,$(PLATFORM_LIBS))
 endif
 
-$(call show_config_variable,PLATFORM_LIBS,[LEVIEVIEIVI])
-$(call show_config_variable,PLATFORM_LIB_NAMES,[LEVIEVIEIVI])
 
 # Error here if any are missing.
 LIBS_NOT_FOUND = $(filter-out $(USER_LIB_NAMES) $(SYS_LIB_NAMES) $(PLATFORM_LIB_NAMES),$(ARDUINO_LIBS))
